@@ -80,6 +80,14 @@
     letter-spacing: -0.02em;
   }
   .line2 { font-weight: 800; margin-top: 3vmin; font-size: clamp(1.5rem, 6.5vw, 4.2rem); }
+  .sig {
+    margin-top: 4vmin; font-weight: 700;
+    font-size: clamp(1rem, 4.2vw, 2rem);
+    color: #fff; opacity: .95;
+    text-shadow: 0 2px 12px rgba(0,0,0,.6);
+    animation: throb 2.4s ease-in-out infinite;
+  }
+  .sig::before { content: "— "; opacity: .7; }
 
   .word {
     display: inline-block; margin: 0 0.15em; will-change: transform;
@@ -143,6 +151,7 @@
   </div>
   <div class="line1" id="l1"></div>
   <div class="line2" id="l2"></div>
+  <div class="sig">מאליאור ❤️</div>
 </div>
 
 <div class="badge">🎉 קליק/נגיעה = עודדים מעופפים</div>
