@@ -1,0 +1,316 @@
+<title>מזל טוב עודד ⚽</title>
+<style>
+  :root { color-scheme: dark; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; background: #05010f; }
+  body {
+    font-family: "Heebo", "Arial Hebrew", "Rubik", system-ui, sans-serif;
+    direction: rtl;
+    display: grid;
+    place-items: center;
+    position: relative;
+  }
+
+  /* particle canvas sits behind everything */
+  #fx {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* animated background layer, swapped per scene */
+  #bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    transition: background 1.2s ease;
+  }
+
+  #stage {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 4vmin;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .line1 {
+    font-weight: 900;
+    line-height: 0.95;
+    text-wrap: balance;
+    font-size: clamp(3.2rem, 16vw, 13rem);
+    letter-spacing: -0.02em;
+  }
+  .line2 {
+    font-weight: 800;
+    margin-top: 3vmin;
+    font-size: clamp(1.6rem, 7vw, 5rem);
+  }
+  .heart {
+    display: inline-block;
+    font-size: clamp(2.5rem, 12vw, 9rem);
+    margin-top: 2vmin;
+  }
+
+  /* ---- word pop-in ---- */
+  .word {
+    display: inline-block;
+    margin: 0 0.15em;
+    will-change: transform;
+    animation: pop 0.6s cubic-bezier(.2,1.6,.3,1) backwards;
+  }
+  @keyframes pop {
+    from { transform: scale(0) rotate(-25deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0); opacity: 1; }
+  }
+
+  /* ---- perpetual motion primitives ---- */
+  @keyframes bounce   { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6vmin) scale(1.04)} }
+  @keyframes wobble   { 0%,100%{transform:rotate(-4deg)} 50%{transform:rotate(4deg)} }
+  @keyframes throb    { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+  @keyframes heartbeat{ 0%,100%{transform:scale(1)} 15%{transform:scale(1.35)} 30%{transform:scale(1)} 45%{transform:scale(1.25)} }
+  @keyframes hue      { to{ filter: hue-rotate(360deg); } }
+  @keyframes float3d  { 0%,100%{transform:perspective(600px) rotateX(0) rotateY(0)} 25%{transform:perspective(600px) rotateX(12deg) rotateY(-10deg)} 75%{transform:perspective(600px) rotateX(-10deg) rotateY(12deg)} }
+  @keyframes shimmer  { to { background-position: 200% center; } }
+  @keyframes spinball { 0%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-5vmin) rotate(180deg)} 100%{transform:translateY(0) rotate(360deg)} }
+
+  .heart { animation: spinball 1.1s linear infinite; }
+
+  /* =================== SCENES =================== */
+
+  /* --- Scene: NEON RAVE --- */
+  .neon #bg   { background: radial-gradient(circle at 30% 30%, #23004a, #05010f 70%); }
+  .neon .line1 {
+    color: #fff;
+    text-shadow: 0 0 8px #ff00e5, 0 0 24px #ff00e5, 0 0 60px #00f0ff, 0 0 100px #00f0ff;
+    animation: throb 1.2s infinite, hue 6s linear infinite;
+  }
+  .neon .line2 { color:#00f0ff; text-shadow:0 0 10px #00f0ff, 0 0 30px #00f0ff; animation: wobble 1.4s infinite; }
+
+  /* --- Scene: GOLD LUX --- */
+  .gold #bg   { background: radial-gradient(circle at 50% 20%, #3a2c00, #0a0700 75%); }
+  .gold .line1 {
+    background: linear-gradient(100deg, #b8860b, #fff6c0, #ffd700, #fff6c0, #b8860b);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: 0 4px 30px rgba(255,215,0,.5);
+    animation: shimmer 2.2s linear infinite, float3d 6s ease-in-out infinite;
+  }
+  .gold .line2 { color:#ffd700; animation: bounce 1.6s infinite; }
+
+  /* --- Scene: VAPORWAVE --- */
+  .vapor #bg  { background: linear-gradient(180deg, #2b1055, #7597de 55%, #ff71ce); }
+  .vapor .line1 {
+    color:#fff;
+    text-shadow: 4px 4px 0 #ff71ce, 8px 8px 0 #01cdfe, 12px 12px 0 #05ffa1;
+    animation: wobble 1.1s infinite;
+  }
+  .vapor .line2 { color:#fff; text-shadow: 3px 3px 0 #ff71ce, 6px 6px 0 #01cdfe; animation: throb 1s infinite; }
+
+  /* --- Scene: FIREWORK NIGHT --- */
+  .night #bg  { background: radial-gradient(circle at 50% 90%, #0d0930, #030008 80%); }
+  .night .line1 {
+    color:#fff;
+    text-shadow: 0 0 20px #fff, 0 0 40px #ffd36e;
+    animation: float3d 5s ease-in-out infinite;
+  }
+  .night .line2 { color:#ffd36e; animation: bounce 1.5s infinite; }
+
+  /* --- Scene: NEEDS_MORE_JPEG (rainbow chaos) --- */
+  .chaos #bg  { background: conic-gradient(from 0deg, #ff0000,#ff8a00,#ffe600,#14ff00,#00e0ff,#7b00ff,#ff00c8,#ff0000); animation: hue 4s linear infinite; }
+  .chaos .line1 {
+    color:#fff; -webkit-text-stroke: 3px #000;
+    animation: bounce 0.5s infinite, wobble 0.7s infinite;
+  }
+  .chaos .line2 { color:#000; background:#fff; padding:.1em .4em; border-radius:.2em; display:inline-block; animation: throb 0.6s infinite; }
+
+  .badge {
+    position: fixed;
+    bottom: 3vmin; right: 3vmin;
+    z-index: 3;
+    font-size: clamp(.7rem, 2.5vw, 1rem);
+    font-weight: 700;
+    color: rgba(255,255,255,.55);
+    background: rgba(0,0,0,.35);
+    padding: .5em 1em;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    letter-spacing: .02em;
+    user-select: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .001s !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+
+<div id="bg"></div>
+<canvas id="fx"></canvas>
+
+<div id="stage">
+  <div class="line1" id="l1"></div>
+  <div class="line2" id="l2"></div>
+  <div class="heart">⚽</div>
+</div>
+
+<div class="badge">🎉 קליק/נגיעה = עוד זיקוקים</div>
+
+<script>
+(function () {
+  "use strict";
+  const stage = document.getElementById("stage");
+  const l1 = document.getElementById("l1");
+  const l2 = document.getElementById("l2");
+  const body = document.body;
+
+  const LINE1 = "מזל טוב עודד";
+  const LINE2 = "אוהב אותך";
+  const SCENES = ["neon", "gold", "vapor", "night", "chaos"];
+  let sceneIdx = -1;
+
+  // build words with staggered pop-in
+  function fill(el, text) {
+    el.innerHTML = "";
+    text.split(" ").forEach((w, i) => {
+      const s = document.createElement("span");
+      s.className = "word";
+      s.textContent = w;
+      s.style.animationDelay = (i * 0.12) + "s";
+      el.appendChild(s);
+    });
+  }
+
+  function nextScene() {
+    body.classList.remove(SCENES[sceneIdx]);
+    sceneIdx = (sceneIdx + 1) % SCENES.length;
+    body.classList.add(SCENES[sceneIdx]);
+    fill(l1, LINE1);
+    fill(l2, LINE2);
+    burst(SCENES[sceneIdx]);
+  }
+
+  /* ============ particle engine ============ */
+  const canvas = document.getElementById("fx");
+  const ctx = canvas.getContext("2d");
+  let W, H, DPR;
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = canvas.width  = innerWidth  * DPR;
+    H = canvas.height = innerHeight * DPR;
+    canvas.style.width = innerWidth + "px";
+    canvas.style.height = innerHeight + "px";
+  }
+  resize();
+  addEventListener("resize", resize);
+
+  const parts = [];
+  const PALETTES = {
+    neon:  ["#ff00e5", "#00f0ff", "#ffffff", "#7b00ff"],
+    gold:  ["#ffd700", "#fff6c0", "#b8860b", "#ffffff"],
+    vapor: ["#ff71ce", "#01cdfe", "#05ffa1", "#ffffff"],
+    night: ["#ff5252", "#ffd36e", "#5ec8ff", "#ffffff", "#b388ff"],
+    chaos: ["#ff0000","#ffe600","#14ff00","#00e0ff","#ff00c8"]
+  };
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  // confetti rain + firework shells depending on scene
+  function burst(scene) {
+    const pal = PALETTES[scene] || PALETTES.neon;
+    // confetti sprinkle from top
+    for (let i = 0; i < 120; i++) {
+      parts.push(confetti(rand(0, W), rand(-H * 0.3, 0), pal));
+    }
+    // a few firework explosions
+    const shells = scene === "night" ? 5 : 3;
+    for (let s = 0; s < shells; s++) {
+      setTimeout(() => explode(rand(W * 0.2, W * 0.8), rand(H * 0.2, H * 0.55), pal), s * 380);
+    }
+  }
+
+  function confetti(x, y, pal) {
+    return {
+      type: "c", x, y,
+      vx: rand(-0.6, 0.6) * DPR,
+      vy: rand(1.5, 4.5) * DPR,
+      g: 0.03 * DPR,
+      size: rand(6, 13) * DPR,
+      rot: rand(0, Math.PI * 2),
+      vr: rand(-0.2, 0.2),
+      color: pal[(Math.random() * pal.length) | 0],
+      life: rand(200, 400)
+    };
+  }
+
+  function explode(x, y, pal) {
+    const n = 70;
+    const hue = pal[(Math.random() * pal.length) | 0];
+    for (let i = 0; i < n; i++) {
+      const a = (Math.PI * 2 * i) / n + rand(-0.1, 0.1);
+      const sp = rand(2, 7) * DPR;
+      parts.push({
+        type: "s", x, y,
+        vx: Math.cos(a) * sp,
+        vy: Math.sin(a) * sp,
+        g: 0.045 * DPR,
+        size: rand(2, 4) * DPR,
+        color: Math.random() < 0.5 ? hue : pal[(Math.random() * pal.length) | 0],
+        life: rand(50, 90),
+        maxLife: 90
+      });
+    }
+  }
+
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      p.vy += p.g;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life--;
+      if (p.type === "c") {
+        p.rot += p.vr;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+        ctx.restore();
+      } else {
+        ctx.globalAlpha = Math.max(0, p.life / (p.maxLife || 90));
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 12 * DPR;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.shadowBlur = 0;
+      }
+      if (p.life <= 0 || p.y > H + 40) parts.splice(i, 1);
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+  // ambient continuous confetti so it never goes quiet
+  setInterval(() => {
+    const pal = PALETTES[SCENES[sceneIdx]] || PALETTES.neon;
+    for (let i = 0; i < 8; i++) parts.push(confetti(rand(0, W), -20, pal));
+  }, 260);
+
+  // click / tap = extra explosion for fun
+  addEventListener("pointerdown", (e) => {
+    const pal = PALETTES[SCENES[sceneIdx]] || PALETTES.neon;
+    explode(e.clientX * DPR, e.clientY * DPR, pal);
+  });
+
+  nextScene();
+  setInterval(nextScene, 4200);
+})();
+</script>
